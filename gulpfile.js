@@ -1,6 +1,8 @@
-var gulp   = require('gulp');
-var concat = require('gulp-concat');
-var react  = require('gulp-react');
+var gulp    = require('gulp');
+var concat  = require('gulp-concat');
+var react   = require('gulp-react');
+var express = require('express');
+var app     = express();
 
 gulp.task('react', function () {
   return gulp.src(['app/!(App)*.jsx', 'app/App.jsx'])
@@ -13,4 +15,9 @@ gulp.task('watch', function() {
   gulp.watch('app/*.jsx', [ 'react' ]);
 });
 
-gulp.task('default', [ 'react', 'watch' ]);
+gulp.task('express', function() {
+  app.use(express.static(__dirname));
+  app.listen(1337);
+});
+
+gulp.task('default', [ 'react', 'watch', 'express' ]);
