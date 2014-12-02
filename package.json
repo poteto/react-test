@@ -1,0 +1,16 @@
+{
+  "name": "react-test",
+  "version": "0.0.1",
+  "description": "fooling around with react",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "poteto",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp-concat": "^2.4.2",
+    "gulp-react": "^2.0.0",
+    "gulp-rename": "^1.2.0"
+  }
+}
