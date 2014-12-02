@@ -3,7 +3,7 @@ var concat     = require('gulp-concat');
 var react      = require('gulp-react');
 
 gulp.task('react', function () {
-  return gulp.src('app/*.jsx')
+  return gulp.src(['app/!(App)*.jsx', 'app/App.jsx'])
     .pipe(react({harmony: true}))
     .pipe(concat('app.js'))
     .pipe(gulp.dest('dist'));

@@ -14,22 +14,22 @@ var Comment = React.createClass({displayName: 'Comment',
   }
 });
 
+var data = [
+  {author: "Pete Hunt", text: "This is one comment"},
+  {author: "Jordan Walke", text: "This is *another* comment"}
+];
+
 var CommentBox = React.createClass({displayName: 'CommentBox',
   render: function() {
     return (
       React.createElement("div", {className: "commentBox"}, 
         React.createElement("h1", null, "Comments"), 
-        React.createElement(CommentList, null), 
+        React.createElement(CommentList, {data: this.props.data}), 
         React.createElement(CommentForm, null)
       )
     );
   }
 });
-
-React.render(
-  React.createElement(CommentBox, null),
-  document.getElementById('content')
-);
 
 var CommentForm = React.createClass({displayName: 'CommentForm',
   render: function() {
@@ -43,11 +43,22 @@ var CommentForm = React.createClass({displayName: 'CommentForm',
 
 var CommentList = React.createClass({displayName: 'CommentList',
   render: function() {
+    var commentNodes = this.props.data.map(function(comment) {
+      return (
+        React.createElement(Comment, {author: comment.author}, 
+          comment.text
+        )
+      );
+    });
     return (
       React.createElement("div", {className: "commentList"}, 
-        React.createElement(Comment, {author: "Pete Hunt"}, "This is one comment"), 
-        React.createElement(Comment, {author: "Jordon Walke"}, "This is *another* comment")
+        commentNodes
       )
     );
   }
 });
+
+React.render(
+  React.createElement(CommentBox, {data: data}),
+  document.getElementById('content')
+);
