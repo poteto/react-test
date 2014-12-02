@@ -14,17 +14,37 @@ var Comment = React.createClass({displayName: 'Comment',
   }
 });
 
-var data = [
-  {author: "Pete Hunt", text: "This is one comment"},
-  {author: "Jordan Walke", text: "This is *another* comment"}
-];
-
 var CommentBox = React.createClass({displayName: 'CommentBox',
+  loadCommentsFromServer: function() {
+    $.ajax({
+      url      : this.props.url,
+      dataType : 'json',
+
+      success: function(data) {
+        this.setState({ data: data });
+      }.bind(this),
+
+      error: function(xhr, status, error) {
+        console.error(this.props.url, status, error.toString());
+      }
+
+    });
+  },
+
+  getInitialState: function() {
+    return { data: [] };
+  },
+
+  componentDidMount: function () {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  },
+
   render: function() {
     return (
       React.createElement("div", {className: "commentBox"}, 
         React.createElement("h1", null, "Comments"), 
-        React.createElement(CommentList, {data: this.props.data}), 
+        React.createElement(CommentList, {data: this.state.data}), 
         React.createElement(CommentForm, null)
       )
     );
@@ -34,8 +54,10 @@ var CommentBox = React.createClass({displayName: 'CommentBox',
 var CommentForm = React.createClass({displayName: 'CommentForm',
   render: function() {
     return (
-      React.createElement("div", {className: "commentForm"}, 
-        "Hello, world! I am a CommentForm."
+      React.createElement("form", {className: "commentForm"}, 
+        React.createElement("input", {type: "text", placeholder: "Your name"}), 
+        React.createElement("input", {type: "text", placeholder: "Say something..."}), 
+        React.createElement("input", {type: "submit", value: "Post"})
       )
     );
   }
@@ -59,6 +81,6 @@ var CommentList = React.createClass({displayName: 'CommentList',
 });
 
 React.render(
-  React.createElement(CommentBox, {data: data}),
+  React.createElement(CommentBox, {url: "comments.json", pollInterval: 2000}),
   document.getElementById('content')
 );

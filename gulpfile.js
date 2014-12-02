@@ -1,6 +1,6 @@
-var gulp       = require('gulp');
-var concat     = require('gulp-concat');
-var react      = require('gulp-react');
+var gulp   = require('gulp');
+var concat = require('gulp-concat');
+var react  = require('gulp-react');
 
 gulp.task('react', function () {
   return gulp.src(['app/!(App)*.jsx', 'app/App.jsx'])
