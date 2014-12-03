@@ -10,25 +10,29 @@ var CommentBox = React.createClass({
 
       error: function(xhr, status, error) {
         console.error(this.props.url, status, error.toString());
-      }
+      }.bind(this)
     });
   },
 
   handleCommentSubmit: function(comment) {
-    this._addComment(comment);
-    $.ajax({
-      url      : this.props.url,
-      dataType : 'json',
-      type     : 'POST',
-      data     : comment,
+    var comments = this._addComment(comment);
+    this.setState({
+      data: comments
+    }, function() {
+      $.ajax({
+        url      : this.props.url,
+        dataType : 'json',
+        type     : 'POST',
+        data     : comment,
 
-      success: function(data) {
-        this.setState({ data: data });
-      }.bind(this),
+        success: function(data) {
+          this.setState({ data: data });
+        }.bind(this),
 
-      error: function(xhr, status, error) {
-        console.error(this.props.url, status, error.toString());
-      }
+        error: function(xhr, status, error) {
+          console.error(this.props.url, status, error.toString());
+        }.bind(this)
+      });
     });
   },
 
@@ -53,9 +57,7 @@ var CommentBox = React.createClass({
 
   _addComment: function(comment) {
     var comments = this.state.data;
-    var newComments = comments.concat([comment]);
-    this.setState({
-      data: newComments
-    });
+    comments.push(comment);
+    return comments;
   }
 });
